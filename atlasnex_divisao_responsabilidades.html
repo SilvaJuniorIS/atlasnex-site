@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AtlasNex — Divisão de Responsabilidades</title>
+  <style>
+    :root{
+      --bg:#07111f;
+      --panel:#0f1b2f;
+      --panel2:#14233d;
+      --text:#eef4ff;
+      --muted:#aebbd2;
+      --primary:#5eead4;
+      --secondary:#60a5fa;
+      --gold:#fbbf24;
+      --danger:#fb7185;
+      --line:rgba(255,255,255,.10);
+      --shadow:0 20px 55px rgba(0,0,0,.28);
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:Inter,Segoe UI,Arial,sans-serif;
+      background:
+        radial-gradient(circle at 15% 0%, rgba(96,165,250,.16), transparent 32%),
+        radial-gradient(circle at 100% 20%, rgba(94,234,212,.11), transparent 30%),
+        var(--bg);
+      color:var(--text);
+      line-height:1.55;
+    }
+    .wrap{max-width:1180px;margin:auto;padding:28px 20px 60px}
+    .hero{
+      background:linear-gradient(135deg,rgba(96,165,250,.17),rgba(94,234,212,.08));
+      border:1px solid var(--line);
+      border-radius:26px;
+      padding:34px;
+      box-shadow:var(--shadow);
+      margin-bottom:22px;
+    }
+    .badge{
+      display:inline-block;
+      padding:7px 12px;
+      border-radius:999px;
+      background:rgba(94,234,212,.11);
+      color:var(--primary);
+      border:1px solid rgba(94,234,212,.28);
+      font-weight:800;
+      font-size:.82rem;
+      margin-bottom:14px;
+    }
+    h1,h2,h3{margin:0 0 12px}
+    h1{font-size:clamp(2rem,4vw,3.4rem);line-height:1.08}
+    h2{font-size:1.45rem}
+    h3{font-size:1.05rem}
+    .subtitle{color:var(--muted);max-width:850px}
+    .accent{color:var(--primary)}
+    .blue{color:var(--secondary)}
+    .gold{color:var(--gold)}
+    .muted{color:var(--muted)}
+    .small{font-size:.9rem}
+    .section{margin-top:22px}
+    .grid{display:grid;gap:18px}
+    .grid-2{grid-template-columns:repeat(2,1fr)}
+    .grid-3{grid-template-columns:repeat(3,1fr)}
+    .grid-4{grid-template-columns:repeat(4,1fr)}
+    .card{
+      background:linear-gradient(180deg,var(--panel),var(--panel2));
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:20px;
+      box-shadow:var(--shadow);
+    }
+    .metric{font-size:1.9rem;font-weight:900}
+    .role{
+      position:relative;
+      overflow:hidden;
+    }
+    .role::after{
+      content:"";
+      position:absolute;
+      width:120px;height:120px;border-radius:50%;
+      right:-45px;top:-45px;
+      background:rgba(96,165,250,.08)
+    }
+    .tag{
+      display:inline-block;
+      padding:5px 10px;
+      border-radius:999px;
+      background:rgba(255,255,255,.06);
+      border:1px solid var(--line);
+      font-size:.78rem;
+      color:var(--muted);
+      margin:3px 4px 3px 0;
+    }
+    .org{
+      display:grid;
+      gap:16px;
+      text-align:center;
+    }
+    .org-box{
+      padding:18px;
+      border-radius:16px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.035);
+    }
+    .org-main{
+      max-width:420px;
+      margin:auto;
+      border-color:rgba(94,234,212,.35);
+      background:rgba(94,234,212,.08);
+    }
+    .org-line{
+      width:2px;height:28px;background:var(--line);margin:auto;
+    }
+    .org-row{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    ul{padding-left:20px;margin:10px 0 0}
+    li{margin:7px 0;color:var(--muted)}
+    table{width:100%;border-collapse:collapse}
+    th,td{padding:12px 10px;border-bottom:1px solid var(--line);text-align:left}
+    th{font-size:.86rem;color:#dce8ff}
+    td{font-size:.92rem;color:var(--muted)}
+    tr.highlight td{background:rgba(94,234,212,.05);color:var(--text);font-weight:700}
+    .timeline{position:relative}
+    .timeline::before{
+      content:"";
+      position:absolute;
+      left:18px;top:10px;bottom:10px;
+      width:2px;background:var(--line)
+    }
+    .step{position:relative;padding-left:56px;margin-bottom:18px}
+    .dot{
+      position:absolute;left:6px;top:1px;
+      width:26px;height:26px;border-radius:50%;
+      display:grid;place-items:center;
+      border:2px solid var(--secondary);
+      background:var(--panel2);
+      font-weight:800;
+    }
+    .checklist{display:grid;gap:10px}
+    .check{
+      display:flex;gap:10px;align-items:flex-start;
+      padding:11px 12px;border-radius:12px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.025)
+    }
+    .check input{margin-top:4px}
+    .flow{
+      display:grid;grid-template-columns:repeat(5,1fr);gap:10px;align-items:center
+    }
+    .flow-box{
+      min-height:112px;
+      padding:14px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.03)
+    }
+    .arrow{text-align:center;font-size:1.5rem;color:var(--primary)}
+    .footer{margin-top:28px;text-align:center;color:var(--muted);font-size:.85rem}
+    @media(max-width:900px){
+      .grid-2,.grid-3,.grid-4,.org-row,.flow{grid-template-columns:1fr}
+      .arrow{transform:rotate(90deg)}
+      .hero{padding:24px}
+    }
+    @media print{
+      body{background:white;color:#111}
+      .hero,.card,.org-box,.flow-box{background:white;box-shadow:none;border:1px solid #ddd}
+      .muted,td,li{color:#444}
+      .badge{color:#0f766e}
+    }
+  </style>
+</head>
+<body>
+<div class="wrap">
+
+  <section class="hero">
+    <div class="badge">ESTRUTURA OPERACIONAL INICIAL</div>
+    <h1>AtlasNex: divisão de responsabilidades entre <span class="accent">produto</span> e <span class="blue">administração</span></h1>
+    <p class="subtitle">
+      Estrutura prática para que Israel concentre energia em criação, configuração e programação,
+      enquanto sua esposa organiza a operação administrativa, financeira, comercial e documental da empresa.
+    </p>
+  </section>
+
+  <section class="grid grid-4">
+    <div class="card">
+      <div class="muted small">Fundador</div>
+      <div class="metric">CEO/CTO</div>
+      <div class="small accent">Produto, tecnologia e estratégia</div>
+    </div>
+    <div class="card">
+      <div class="muted small">Operações</div>
+      <div class="metric">COO/CFO</div>
+      <div class="small blue">Administração, finanças e processos</div>
+    </div>
+    <div class="card">
+      <div class="muted small">Apoio inteligente</div>
+      <div class="metric">IA</div>
+      <div class="small gold">Documentação e automação</div>
+    </div>
+    <div class="card">
+      <div class="muted small">Ganho esperado</div>
+      <div class="metric">30–40%</div>
+      <div class="small muted">Mais tempo disponível para desenvolver</div>
+    </div>
+  </section>
+
+  <section class="section card">
+    <h2>Organograma inicial</h2>
+    <div class="org">
+      <div class="org-box org-main">
+        <strong>AtlasNex</strong><br>
+        <span class="muted small">Tecnologia, inteligência aplicada e automação</span>
+      </div>
+      <div class="org-line"></div>
+      <div class="org-row">
+        <div class="org-box">
+          <strong>Israel — CEO / CTO</strong>
+          <div class="muted small">Estratégia, produto, tecnologia e programação</div>
+        </div>
+        <div class="org-box">
+          <strong>Esposa — COO / CFO</strong>
+          <div class="muted small">Administração, finanças, operação e clientes</div>
+        </div>
+        <div class="org-box">
+          <strong>IA de Operações</strong>
+          <div class="muted small">Documentos, relatórios, organização e automações</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>Responsabilidades principais</h2>
+    <div class="grid grid-3">
+      <article class="card role">
+        <h3>Israel — Produto e Tecnologia</h3>
+        <ul>
+          <li>Definir a visão do produto.</li>
+          <li>Programar e configurar o sistema.</li>
+          <li>Projetar arquitetura e banco de dados.</li>
+          <li>Desenvolver integrações e automações.</li>
+          <li>Priorizar funcionalidades do MVP.</li>
+          <li>Conduzir demonstrações técnicas.</li>
+          <li>Resolver suporte de nível técnico.</li>
+        </ul>
+        <span class="tag">CEO</span><span class="tag">CTO</span><span class="tag">Product Owner</span>
+      </article>
+
+      <article class="card role">
+        <h3>Esposa — Administração e Operações</h3>
+        <ul>
+          <li>Organizar documentos e processos internos.</li>
+          <li>Controlar receitas, despesas e orçamento.</li>
+          <li>Gerenciar clientes, contatos e propostas.</li>
+          <li>Organizar marketing e conteúdo.</li>
+          <li>Realizar atendimento inicial.</li>
+          <li>Preparar relatórios do curso.</li>
+          <li>Testar fluxos e registrar falhas.</li>
+        </ul>
+        <span class="tag">COO</span><span class="tag">CFO</span><span class="tag">Administrativo</span>
+      </article>
+
+      <article class="card role">
+        <h3>IA — Apoio Operacional</h3>
+        <ul>
+          <li>Redigir propostas comerciais.</li>
+          <li>Gerar contratos e documentos.</li>
+          <li>Criar atas e relatórios.</li>
+          <li>Organizar tarefas e prioridades.</li>
+          <li>Produzir rascunhos de conteúdo.</li>
+          <li>Analisar indicadores.</li>
+          <li>Automatizar rotinas administrativas.</li>
+        </ul>
+        <span class="tag">Assistente</span><span class="tag">Automação</span><span class="tag">IA</span>
+      </article>
+    </div>
+  </section>
+
+  <section class="section grid grid-2">
+    <div class="card">
+      <h2>Áreas que sua esposa pode assumir</h2>
+      <table>
+        <thead>
+          <tr><th>Área</th><th>Atividades</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Administração</td><td>Cadastros, documentos, contratos e organização interna.</td></tr>
+          <tr><td>Financeiro</td><td>Fluxo de caixa, custos, assinaturas, orçamento e margem.</td></tr>
+          <tr><td>Comercial</td><td>CRM, propostas, follow-up, agendamentos e atendimento.</td></tr>
+          <tr><td>Marketing</td><td>Postagens, Canva, LinkedIn, newsletters e site.</td></tr>
+          <tr><td>Curso</td><td>Cronograma, evidências, relatórios e apresentações.</td></tr>
+          <tr><td>Qualidade</td><td>Testes, checklists, revisão de textos, links e fluxos.</td></tr>
+          <tr><td>Pesquisa</td><td>Concorrentes, preços, clientes, oportunidades e mercado.</td></tr>
+          <tr class="highlight"><td>Inteligência comercial</td><td>Montar e manter uma base de potenciais clientes.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>O que ela pode entregar toda semana</h2>
+      <div class="timeline">
+        <div class="step">
+          <div class="dot">1</div>
+          <strong>Relatório financeiro</strong>
+          <span class="muted small">Saldo, gastos, assinaturas, previsão e orçamento restante.</span>
+        </div>
+        <div class="step">
+          <div class="dot">2</div>
+          <strong>Relatório comercial</strong>
+          <span class="muted small">Leads, contatos, reuniões, propostas e próximos passos.</span>
+        </div>
+        <div class="step">
+          <div class="dot">3</div>
+          <strong>Relatório do curso</strong>
+          <span class="muted small">Atividades concluídas, evidências, fotos e aprendizados.</span>
+        </div>
+        <div class="step">
+          <div class="dot">4</div>
+          <strong>Relatório de qualidade</strong>
+          <span class="muted small">Erros identificados, sugestões e prioridades de correção.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section card">
+    <h2>Fluxo de trabalho recomendado</h2>
+    <div class="flow">
+      <div class="flow-box">
+        <strong>1. Planejamento</strong>
+        <div class="muted small">Vocês definem metas e entregas da semana.</div>
+      </div>
+      <div class="arrow">→</div>
+      <div class="flow-box">
+        <strong>2. Execução paralela</strong>
+        <div class="muted small">Israel desenvolve; ela organiza operação e mercado.</div>
+      </div>
+      <div class="arrow">→</div>
+      <div class="flow-box">
+        <strong>3. Revisão conjunta</strong>
+        <div class="muted small">Testam o produto e avaliam indicadores.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>Rotina semanal do casal</h2>
+    <div class="grid grid-2">
+      <div class="card">
+        <h3>Israel</h3>
+        <table>
+          <tbody>
+            <tr><td>Segunda</td><td>Programação e estrutura do produto</td></tr>
+            <tr><td>Terça</td><td>Arquitetura, banco de dados e segurança</td></tr>
+            <tr><td>Quarta</td><td>Interfaces, integrações e automações</td></tr>
+            <tr><td>Quinta</td><td>Testes técnicos e correções</td></tr>
+            <tr><td>Sexta</td><td>Demonstração, revisão e planejamento</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card">
+        <h3>Sua esposa</h3>
+        <table>
+          <tbody>
+            <tr><td>Segunda</td><td>Financeiro, documentos e controle do curso</td></tr>
+            <tr><td>Terça</td><td>Pesquisa de mercado e concorrência</td></tr>
+            <tr><td>Quarta</td><td>CRM, contatos e propostas</td></tr>
+            <tr><td>Quinta</td><td>Marketing, conteúdo e atendimento</td></tr>
+            <tr><td>Sexta</td><td>Relatórios, testes e reunião de fechamento</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="section grid grid-3">
+    <div class="card">
+      <h3>Ferramentas de organização</h3>
+      <ul>
+        <li>Notion</li>
+        <li>Trello</li>
+        <li>ClickUp</li>
+        <li>Google Drive</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Ferramentas administrativas</h3>
+      <ul>
+        <li>Excel ou Google Sheets</li>
+        <li>Google Docs</li>
+        <li>Microsoft 365</li>
+        <li>HubSpot ou Odoo</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Comunicação e marketing</h3>
+      <ul>
+        <li>Canva</li>
+        <li>LinkedIn</li>
+        <li>WhatsApp Business</li>
+        <li>ChatGPT</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section card">
+    <h2>Checklist de implantação</h2>
+    <div class="checklist">
+      <label class="check"><input type="checkbox"> <span>Definir formalmente os cargos de CEO/CTO e COO/CFO.</span></label>
+      <label class="check"><input type="checkbox"> <span>Criar uma pasta central da AtlasNex no Google Drive.</span></label>
+      <label class="check"><input type="checkbox"> <span>Criar uma planilha financeira e registrar os R$ 2.500 iniciais.</span></label>
+      <label class="check"><input type="checkbox"> <span>Criar uma base de clientes e um CRM simples.</span></label>
+      <label class="check"><input type="checkbox"> <span>Montar um modelo de proposta comercial.</span></label>
+      <label class="check"><input type="checkbox"> <span>Criar um diário de bordo do curso.</span></label>
+      <label class="check"><input type="checkbox"> <span>Definir uma reunião semanal de 30 minutos.</span></label>
+      <label class="check"><input type="checkbox"> <span>Separar tarefas técnicas de tarefas administrativas.</span></label>
+    </div>
+  </section>
+
+  <section class="section card">
+    <h2>Resultado esperado</h2>
+    <p class="muted">
+      Com essa estrutura, a AtlasNex deixa de funcionar como um projeto individual e passa a operar como uma pequena empresa real.
+      Israel mantém foco no desenvolvimento do produto, enquanto sua esposa cria disciplina administrativa, previsibilidade financeira,
+      organização comercial e continuidade operacional.
+    </p>
+    <p><strong class="accent">Você constrói o produto. Ela constrói a empresa. A IA ajuda os dois a ganhar velocidade.</strong></p>
+  </section>
+
+  <div class="footer">
+    AtlasNex — Estrutura inicial de gestão, produto e operações
+  </div>
+</div>
+</body>
+</html>
